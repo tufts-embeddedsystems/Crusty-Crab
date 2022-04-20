@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "temp_config.h"
+#include "sensors_config.h"
 
 double thermistor_read_temp()
 {

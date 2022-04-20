@@ -4,12 +4,13 @@
 #include "thermistor.h"
 #include "sensor.h"
 #include "sleep.h"
+#include "battery_sensor.h"
 
 void app_main(void)
 {
     // Initial setup
     ++bootCount;
-    printf("Boot number: %i\n", bootCount);
+    PRINTF("Boot number: %i\n", bootCount);
 
     //Print the wakeup reason for ESP32
     print_wakeup_reason();
@@ -27,11 +28,16 @@ void app_main(void)
 
     //Setup variables
     char tCelsius [33];            // Hold temperature in celsius
+    char pBattery [33];            // Hold battery percentage
 
     // Get the temperature for thermistor and sensor
     // Average them and convert from double to int
-    PRINTF("\n-----\n");
-    itoa ((thermistor_read_temp() + sensor_read_temp())/2 * 100.0, tCelsius, 10);
+    itoa ((thermistor_read_temp() + sensor_read_temp())/2 * 1000.0, tCelsius, 10);
+
+    // Get battery voltage
+    battery_percentage = battery_read();
+    PRINTF("Battery Percentage: %i%%\n", battery_percentage);
+    itoa (battery_percentage, pBattery, 10);
 
     // Enable Flash (aka non-volatile storage, NVS)
     // The WiFi stack uses this to store some persistent information
@@ -58,8 +64,11 @@ void app_main(void)
 
     printf("Sending MQTT message...\n");
     esp_mqtt_client_publish(client, "Crusty_Crab/temperature", tCelsius, 0, 1, 0);
+    vTaskDelay(pdMS_TO_TICKS(100));
+    esp_mqtt_client_publish(client, "Crusty_Crab/battery", pBattery, 0, 1, 0);
 
     // Deep sleep
     PRINTF("Going to deep sleep now\n");
     esp_deep_sleep_start();
+
 }

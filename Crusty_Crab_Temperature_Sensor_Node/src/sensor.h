@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "temp_config.h"
+#include "sensors_config.h"
 
 double sensor_read_temp()
 {
     double tCelsius    = 0;            // Hold temperature in celsius
-    double voltageAverage  = 0;            // Holds the average voltage measurement
+    double voltageAverage  = 0;        // Holds the average voltage measurement
     double adcAverage  = 0;            // Holds the average voltage measurement
     int    adcSamples[SAMPLE_NUMBER];  // Array to hold each voltage measurement
     //uint32_t voltage = 0;

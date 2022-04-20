@@ -17,6 +17,7 @@
 #include "esp_err.h"
 #include "driver/gpio.h"
 #include "esp_sleep.h"
+#include "sdkconfig.h"
 
 #include "nvs_flash.h"
 #include "esp_netif.h"
