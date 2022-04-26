@@ -25,7 +25,7 @@ struct PACKET{
   int32_t   secondary_temperature; // 4
   uint8_t   battery_percentage;    // 1
   short     data_len;              // 2
-  char      data[];                // 0
+  char*     data;                  // 0
 };
  
 int main ()
@@ -45,8 +45,7 @@ int main ()
     
     unsigned char foo[sizeof(struct PACKET)+len * sizeof(char)];
     
-    struct PACKET packet = {seconds, temp, temp, batt, len};
-    memcpy(packet.data, data, len);
+    struct PACKET packet = {seconds, temp, temp, batt, len, data};
     
     printf("Packet Data: %s\n", packet.data);
 
