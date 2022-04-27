@@ -5,13 +5,12 @@
 
 #include "sensors_config.h"
 
-RTC_DATA_ATTR int battery_percentage = 100;
-
-int battery_read()
+uint8_t battery_read()
 {
-    double voltageAverage = 0;         // Holds the average voltage measurement
-    double adcAverage = 0;             // Holds the average voltage measurement
-    int    adcSamples[SAMPLE_NUMBER];  // Array to hold each voltage measurement
+    double      voltageAverage = 0;         // Holds the average voltage measurement
+    double      adcAverage = 0;             // Holds the average voltage measurement
+    int         adcSamples[SAMPLE_NUMBER];  // Array to hold each voltage measurement
+    uint8_t     percentage = 0;             // Holds the batterry percentage
 
     // Set BATTERY_SENSOR_EN_PIN to act as GND to get current flowing
     gpio_set_direction(BATTERY_SENSOR_EN_PIN, GPIO_MODE_OUTPUT);
@@ -41,7 +40,14 @@ int battery_read()
     if (adcAverage == 0)
         voltageAverage = 0;
 
-    PRINTF("Battery voltage: %lf V\n", adcAverage, voltageAverage / 1000.0);
+    if (voltageAverage < 1400)
+            percentage = 0;
+    else if (voltageAverage > 2000)
+        percentage = 100;
+    else
+        percentage = (voltageAverage - DEAD_BATTERY_VOLT) / (MAX_BATTERY_VOLT*30) - 10000;
 
-    return (voltageAverage / 1000.0) / MAX_BATTERY_VOLTAGE * 100.0;
+    PRINTF("Battery voltage: %lf V, Percentage: %d %%\n", voltageAverage / 1000.0, percentage);
+
+    return percentage;
 }

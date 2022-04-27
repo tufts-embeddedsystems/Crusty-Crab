@@ -16,6 +16,7 @@
 #include "lwip/sys.h"
 #include "main_config.h"
 
+RTC_DATA_ATTR int connect_retry;
 
 // Scan mode, either `WIFI_FAST_SCAN` or `WIFI_ALL_CHANNEL_SCAN`
 #define EXAMPLE_WIFI_SCAN_METHOD WIFI_FAST_SCAN
@@ -65,6 +66,8 @@ static void on_got_ip(void *arg, esp_event_base_t event_base,
 
 esp_err_t example_connect(void)
 {
+    connect_retry = 0;
+
     // If the semaphore is already initialized, something has gone horribly wrong
     if (s_semph_get_ip_addrs != NULL) {
         return ESP_ERR_INVALID_STATE;
@@ -77,6 +80,11 @@ esp_err_t example_connect(void)
     for (int i = 0; i < NR_OF_IP_ADDRESSES_TO_WAIT_FOR; ++i) {
         xSemaphoreTake(s_semph_get_ip_addrs, portMAX_DELAY);
     }
+
+    if (connect_retry >= MAX_RETRY) {
+        return ESP_FAIL;
+    }
+
     // iterate over active interfaces, and print out IPs of "our" netifs
     esp_netif_t *netif = NULL;
     esp_netif_ip_info_t ip;
@@ -94,6 +102,7 @@ esp_err_t example_connect(void)
 
 esp_err_t example_disconnect(void)
 {
+    ESP_LOGI(TAG, "Disconnecting");
     if (s_semph_get_ip_addrs == NULL) {
         return ESP_ERR_INVALID_STATE;
     }
@@ -107,12 +116,18 @@ esp_err_t example_disconnect(void)
 static void on_wifi_disconnect(void *arg, esp_event_base_t event_base,
                                int32_t event_id, void *event_data)
 {
+    if (connect_retry >= MAX_RETRY) {
+        xSemaphoreGive(s_semph_get_ip_addrs);
+        return;
+    }
+
     ESP_LOGI(TAG, "Wi-Fi disconnected, trying to reconnect...");
     esp_err_t err = esp_wifi_connect();
     if (err == ESP_ERR_WIFI_NOT_STARTED) {
         return;
     }
     ESP_ERROR_CHECK(err);
+    connect_retry++;
 }
 
 static esp_netif_t *wifi_start(void)
@@ -149,6 +164,8 @@ static esp_netif_t *wifi_start(void)
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
     ESP_ERROR_CHECK(esp_wifi_start());
     esp_wifi_connect();
+
+    ESP_LOGI(TAG, "End of wifi_start");
     return netif;
 }
 
@@ -166,6 +183,8 @@ static void wifi_stop(void)
     ESP_ERROR_CHECK(esp_wifi_clear_default_wifi_driver_and_handlers(wifi_netif));
     esp_netif_destroy(wifi_netif);
     s_example_esp_netif = NULL;
+
+    ESP_LOGI(TAG, "End of wifi stop");
 }
 
 /*

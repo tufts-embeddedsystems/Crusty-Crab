@@ -28,26 +28,3 @@ void print_wakeup_reason(){
     default : PRINTF("Wakeup was not caused by deep sleep: %d\n",wakeup_reason); break;
   }
 }
-
-/*
-void deep_sleep()
-{
-    // Initial setup
-    ++bootCount;
-    printf("Boot number: %i\n", bootCount);
-
-    //Print the wakeup reason for ESP32
-    print_wakeup_reason();
-
-    // Setup timer to wakeup board
-    esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
-
-    // Wait for a bit and then Start sleep
-    printf("Active mode for %i seconds\n", TIME_TO_SLEEP);
-    vTaskDelay(pdMS_TO_TICKS(TIME_TO_SLEEP * 1000));
-    
-    // Deep sleep
-    printf("Going to deep sleep now\n");
-    esp_deep_sleep_start();
-}
-*/

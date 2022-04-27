@@ -11,6 +11,7 @@
 
 // My configuration
 #define CONFIG_EXAMPLE_CONNECT_WIFI 1
+#define MAX_RETRY 3
 
 #ifdef __cplusplus
 extern "C" {

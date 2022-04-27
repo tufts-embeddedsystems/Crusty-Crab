@@ -2,11 +2,13 @@
 // Main configuration for the project
 
 #pragma once
+// #pragma pack(1)
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <time.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
@@ -24,7 +26,6 @@
 #include "mqtt_client.h"
 #include "minimal_wifi.h"
 
-
 // VERBOSE 1 means print, 0 means don't print
 #define VERBOSE 1
 
@@ -34,7 +35,7 @@
   #define PRINTF(f_, ...)
 #endif
 
-#define TIME_TO_SLEEP  20        /* Time ESP32 will go to sleep (in seconds) */
+#define TIME_TO_SLEEP  60        /* Time ESP32 will go to sleep (in seconds) */
 
 #define BROKER_URI "mqtt://en1-pi.eecs.tufts.edu"
 

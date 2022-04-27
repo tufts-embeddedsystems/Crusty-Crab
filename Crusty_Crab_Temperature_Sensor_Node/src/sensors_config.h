@@ -8,7 +8,7 @@
 #define DEFAULT_VREF    1100        //Use adc2_vref_to_gpio() to obtain a better estimate
 
 #define VDD             3.3
-#define MAX_ADC         511.0
+#define MAX_ADC         4095.0
 #define SAMPLE_NUMBER   10
 
 #define ROOM_TEMP          298.15   // room temperature in Kelvin
@@ -23,8 +23,9 @@
 
 // Battery sensor configs
 #define BATTERY_SENSOR_EN_PIN 10
-#define BATTERY_WAIT          1000
-#define MAX_BATTERY_VOLTAGE   6.0
+#define BATTERY_WAIT          100    // in ms
+#define MAX_BATTERY_VOLT      2000   // in mV
+#define DEAD_BATTERY_VOLT     1400   // AA battery dies at 1.4 V
 
 static esp_adc_cal_characteristics_t *adc_chars;
 static const adc1_channel_t thermistor_channel = ADC1_CHANNEL_0;     //GPIO0

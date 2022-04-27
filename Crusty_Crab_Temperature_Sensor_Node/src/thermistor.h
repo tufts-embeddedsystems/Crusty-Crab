@@ -5,7 +5,7 @@
 
 #include "sensors_config.h"
 
-double thermistor_read_temp()
+int32_t thermistor_read_temp()
 {
     //Setup variables
     double rThermistor = 0;            // Holds thermistor resistance value
@@ -13,14 +13,12 @@ double thermistor_read_temp()
     double tCelsius    = 0;            // Hold temperature in celsius
     double adcAverage  = 0;            // Holds the average voltage measurement
     int    adcSamples[SAMPLE_NUMBER];  // Array to hold each voltage measurement
-    //uint32_t voltage = 0;
  
     // Sample ADC1 for thermistor for SAMPLE_NUMBER times
     for (int i = 0; i < SAMPLE_NUMBER; i++) 
     {
       adcSamples[i] = adc1_get_raw(thermistor_channel); // read from pin and store
-      //voltage = esp_adc_cal_raw_to_voltage(adcSamples[i], adc_chars);
-      //PRINTF("Thermistor Sample(%d) Raw: %d\tVoltage: %dmV\n", i, adcSamples[i], voltage);
+      //PRINTF("adc: %d\n", adcSamples[i]);
       vTaskDelay(pdMS_TO_TICKS(10)); // wait 10 milliseconds
     }
 
@@ -45,5 +43,5 @@ double thermistor_read_temp()
     tCelsius = tKelvin - 273.15 + THERMISTOR_OFFSET; // convert kelvin to celsius
     PRINTF("Thermistor Temperature: %lf C\n", tCelsius);
 
-    return tCelsius;
+    return tCelsius * 1000;
 }
