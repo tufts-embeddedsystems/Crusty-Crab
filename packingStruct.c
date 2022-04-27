@@ -53,7 +53,7 @@ int main ()
         sprintf(foo+19, "%s", data);
     
     printf("Payload: %.8s%.4s%.4s%.1s%.2s%s\n", foo, foo+8, foo+12, foo+16, foo+17, foo+19);
-    
+
     // printf("Time: ");
     // for (int i = 0; i < 8; i++)
     // {
@@ -97,21 +97,31 @@ int main ()
     //     printf("%c", foo[20+i]);
     // }
     // printf("\n");
-
-    // void *ptr = foo;
-    // struct PACKET *unpack = (struct PACKET *)ptr;
     
-    char unpack_time[9], unpack_temp[5], unpack_batt[2], unpack_len[3];
-    sprintf(unpack_time, "%.8s", foo);
-    sprintf(unpack_temp, "%.4s", foo+8);
-    sprintf(unpack_batt, "%.1s", foo+16);
-    sprintf(unpack_len , "%.2s", foo+17);
+    char unpack_time[9], unpack_tSensor[5], unpack_tTherm[5], unpack_batt[2], unpack_len[3];
+    memset(unpack_time, '\0', sizeof(unpack_time));
+    memset(unpack_tSensor, '\0', sizeof(unpack_tSensor));
+    memset(unpack_tTherm, '\0', sizeof(unpack_tTherm));
+    memset(unpack_batt, '\0', sizeof(unpack_batt));
+    memset(unpack_len, '\0', sizeof(unpack_len));
     
-    printf("Unpack:\n%lld, %d, %d, %d, %d\n", *(long long int*) unpack_time, 
-                                        *(int*) unpack_temp, 
-                                        *(int*) unpack_temp,
+    sprintf(unpack_time,  "%.8s", foo);
+    sprintf(unpack_tSensor, "%.4s", foo+8);
+    sprintf(unpack_tTherm, "%.4s", foo+12);
+    sprintf(unpack_batt,  "%.1s", foo+16);
+    sprintf(unpack_len,   "%.2s", foo+17);
+    
+    printf("Time: %s\n", unpack_time);
+    printf("Temp1: %s\n", unpack_tSensor);
+    printf("Temp2: %s\n", unpack_tTherm);
+    printf("Battery: %s\n", unpack_batt);
+    printf("Len: %s\n", unpack_len);
+    
+    printf("Unpack:\n%lu, %d, %d, %u, %d\n", *(uint64_t*) unpack_time, 
+                                        *(int*) unpack_tSensor, 
+                                        *(int*) unpack_tTherm,
                                         *(uint8_t*) unpack_batt, 
                                         *(short*) unpack_len);
-
+    
     return(0);
 }
