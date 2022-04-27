@@ -48,9 +48,13 @@ int main ()
     
     unsigned char foo[sizeof(struct PACKET)+len];
     memset(foo, 0, sizeof(foo));
-    sprintf(foo, "%.8s%.4s%.4s%.1s%.2s", pBuffer, pBuffer+8, pBuffer+12, pBuffer+16, pBuffer+18);
+    memcpy(foo, pBuffer, 8);
+    memcpy(foo+8, pBuffer+8, 4);
+    memcpy(foo+12, pBuffer+12, 4);
+    memcpy(foo+16, pBuffer+16, 1);
+    memcpy(foo+17, pBuffer+18, 2);
     if (len > 0)
-        sprintf(foo+19, "%s", data);
+        memcpy(foo+19, data, len);
     
     printf("Payload: %.8s%.4s%.4s%.1s%.2s%s\n", foo, foo+8, foo+12, foo+16, foo+17, foo+19);
 
