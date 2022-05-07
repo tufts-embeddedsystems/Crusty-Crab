@@ -35,9 +35,11 @@
   #define PRINTF(f_, ...)
 #endif
 
-#define TIME_TO_SLEEP  60        /* Time ESP32 will go to sleep (in seconds) */
+#define TIME_TO_SLEEP  1800        /* Time ESP32 will go to sleep (in seconds), half an hour */
 
 #define BROKER_URI "mqtt://en1-pi.eecs.tufts.edu"
 
 #define CONFIG_EXAMPLE_WIFI_SSID "Tufts_Wireless"
 #define CONFIG_EXAMPLE_WIFI_PASSWORD ""
+
+#define ON_LED  6

@@ -1,24 +1,17 @@
 // Luan Banh
 // Temperature reading from sensor
 // G-NIMO-005
+// TEMP_SENSOR_EN_PIN is 10
 
 #pragma once
 
 #include "sensors_config.h"
 
-int32_t sensor_read_temp()
+int32_t sensor_read_temp(int adcSamples[SAMPLE_NUMBER])
 {
     double tCelsius    = 0;            // Hold temperature in celsius
     double voltageAverage  = 0;        // Holds the average voltage measurement
     double adcAverage  = 0;            // Holds the average voltage measurement
-    int    adcSamples[SAMPLE_NUMBER];  // Array to hold each voltage measurement
- 
-    // Sample ADC1 for thermistor for SAMPLE_NUMBER times
-    for (int i = 0; i < SAMPLE_NUMBER; i++) 
-    {
-      adcSamples[i] = adc1_get_raw(sensor_channel); // read from pin and store
-      vTaskDelay(pdMS_TO_TICKS(10)); // wait 10 milliseconds
-    }
 
     // Calculate the average voltage
     for (int i = 0; i < SAMPLE_NUMBER; i++)
@@ -30,7 +23,7 @@ int32_t sensor_read_temp()
     adcAverage /= SAMPLE_NUMBER;
     if (adcAverage == 0)
       voltageAverage = 0;
-    //PRINTF("Average voltage: %lf V\n", voltageAverage/1000);
+    // PRINTF("Average sensor voltage: %lf mV\n", voltageAverage);
 
     // Convert voltage into temperature for sensor
     // T / °C = VSDM / VDD x 175.72 – 46.85

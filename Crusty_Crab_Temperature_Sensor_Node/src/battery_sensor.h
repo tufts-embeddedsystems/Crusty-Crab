@@ -1,33 +1,16 @@
 // Luan Banh
 // Battery ADC reading
+// BATTERY_SENSOR_EN_PIN is 7
 
 #pragma once
 
 #include "sensors_config.h"
 
-uint8_t battery_read()
+uint8_t battery_read(int adcSamples[SAMPLE_NUMBER])
 {
     double      voltageAverage = 0;         // Holds the average voltage measurement
     double      adcAverage = 0;             // Holds the average voltage measurement
-    int         adcSamples[SAMPLE_NUMBER];  // Array to hold each voltage measurement
     uint8_t     percentage = 0;             // Holds the batterry percentage
-
-    // Set BATTERY_SENSOR_EN_PIN to act as GND to get current flowing
-    gpio_set_direction(BATTERY_SENSOR_EN_PIN, GPIO_MODE_OUTPUT);
-    gpio_set_level(BATTERY_SENSOR_EN_PIN, 0);
-
-    //Wait a bit before taking samples
-    vTaskDelay(BATTERY_WAIT / portTICK_PERIOD_MS);
-
-    // Sample ADC1 for battery for SAMPLE_NUMBER times
-    for (int i = 0; i < SAMPLE_NUMBER; i++)
-    {
-        adcSamples[i] = adc1_get_raw(battery_sensor_channel); // read from pin and store
-        vTaskDelay(pdMS_TO_TICKS(10));                        // wait 10 milliseconds
-    }
-
-    // Set BATTERY_SENSOR_EN_PIN as floating pin to stop current from flowing
-    gpio_set_direction(BATTERY_SENSOR_EN_PIN, GPIO_MODE_INPUT);
 
     // Calculate the average voltage
     for (int i = 0; i < SAMPLE_NUMBER; i++)
@@ -40,9 +23,9 @@ uint8_t battery_read()
     if (adcAverage == 0)
         voltageAverage = 0;
 
-    if (voltageAverage < 1400)
+    if (voltageAverage < 1400) // 0% if less than 1.4V . . .
             percentage = 0;
-    else if (voltageAverage > 2000)
+    else if (voltageAverage > 2000) // 100% if more than 2V . . .
         percentage = 100;
     else
         percentage = (voltageAverage - DEAD_BATTERY_VOLT) / (MAX_BATTERY_VOLT*30) - 10000;
