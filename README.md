@@ -28,41 +28,40 @@ Documentation         : Jessica Nordlund
 
 ## Basic Program Flow
 ```
-.----> Deep Sleep <----------------.
-|          |                       |
-|        Wakeup                    |
-|          |                       |
-|     Boot count++                 |
-|          |                       |
-|    Set wakeup timer              |
-|          |                       | 
-|    Check boot count              |
-|          |                       |  
-|  (Is count 1 or 3?) ---- <No> ---|           
-|          |                       |
-|        <Yes>                     |
-|          |                       |
-|    Boot count = 2                |
-|          |                       |
-|    Setup ADC chars               |
-|          |                       |
-|    Take readings                 |
-|          |                       |                      
-|      Retry = 0                   |
-|          |                       |
-|     (Is retry 3?) ---- <Yes> ----'
-|          |      ^----------------.
-|         <No>                     |
-|          |                       |
-|    Connect to Wifi            Retry++
-|          |                       | 
-|     (Connected?) ----- <No> -----'
-|          |
-|        <Yes>    
-|          |
-|   Send MQTT message
-|          |
-|__________|          
+                                   .---------> Deep Sleep <----------------.
+                                   |               |                       |
+                                   |             Wakeup                    |
+                                   |               |                       |
+                                   |          Boot count++                 |
+                                   |               |                       |
+                                   |         Set wakeup timer              |
+                                   |               |                       | 
+                                   |         Check boot count              |
+                                   |               |                       |  
+                                   |       (Is count 1 or 3?) ---- <No> ---|           
+                                   |               |                       |
+                                   |             <Yes>                     |
+                                   |               |                       |
+                                   |         Boot count = 2                |
+                                   |               |                       |
+                                   |         Setup ADC chars               |
+                                   |               |                       |
+                                   |         Take readings                 |
+                                   |               |                       |                      
+                                   |           Retry = 0                   |
+                                   |               |                       |
+                                   |          (Is retry 3?) ---- <Yes> ----'
+                                   |               |      ^----------------.
+                                   |              <No>                     |
+                                   |               |                       |
+                                   |         Connect to Wifi            Retry++
+                                   |               |                       | 
+                                   |          (Connected?) ----- <No> -----'
+                                   |               |
+                                   |             <Yes>    
+                                   |               |
+                                   |        Send MQTT message
+                                   |_______________|          
 
 ```
 
@@ -81,7 +80,8 @@ Change the topic name of the MQTT to the correct <node_id>
 
 ### main_debug.c
 ```
-Use to debug a node to see which pin is not connected, change offset, etc.
+Use to debug a node to see which pin is not connected, 
+how much to change offset, etc.
 ```
 
 ### sensors_config.h
