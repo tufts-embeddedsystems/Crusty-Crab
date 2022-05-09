@@ -1,4 +1,30 @@
-# README
+# Crusty Crab
+
+Contributors: Luan Banh, Taswar Mahbub, Char McFarland, Jessica Nordlund, Huyen Pham (and Ben McDermott)
+
+## Goal
+```
+Design, build, and program 10 temperature sensor nodes to measure temperature once an hour. 
+Nodes should last 6 months in the field. 
+```
+Note: due to software limitation, node will wake up every half and hour but will only measure temperature and report it once an hour.
+
+## Parts
+```
+Microcontroller : ESP32-C3
+Sensor          : G-NIMO-005
+Thermistor      : TDK B57350V2104F460
+```
+
+## Roles
+```
+Communication/Manager : Luan Banh
+Electrical Engineers  : Huyen Pham, Jessica Nordlund, and Taswar Mahbub
+Logistics             : Huyen Pham and Jessica Nordlund
+Software Engineers    : Luan Banh and Char McFarland
+Enclosure Design      : Char McFarland (and Ben McDermott)
+Documentation         : Jessica Nordlund
+```
 
 ## Basic Program Flow
 ```
