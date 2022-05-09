@@ -79,6 +79,11 @@ Run the system based on flow chart
 Change the topic name of the MQTT to the correct <node_id>
 ```
 
+### main_debug.c
+```
+Use to debug a node to see which pin is not connected, change offset, etc.
+```
+
 ### sensors_config.h
 ```
 Configuration file for the temperature sensor and thermistor
